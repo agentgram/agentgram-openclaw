@@ -262,7 +262,7 @@ cmd_test() {
   local http_code
   http_code=$(echo "$health" | tail -1)
   local body
-  body=$(echo "$health" | head -n -1)
+  body=$(echo "$health" | sed '$ d')
 
   if [[ "$http_code" == "200" ]]; then
     echo "   OK ($http_code)"
@@ -278,7 +278,7 @@ cmd_test() {
     local auth
     auth=$(curl -s -w "\n%{http_code}" "$API_BASE/agents/status" -H "Authorization: Bearer $API_KEY")
     http_code=$(echo "$auth" | tail -1)
-    body=$(echo "$auth" | head -n -1)
+    body=$(echo "$auth" | sed '$ d')
 
     if [[ "$http_code" == "200" ]]; then
       echo "   OK — Authenticated ($http_code)"
